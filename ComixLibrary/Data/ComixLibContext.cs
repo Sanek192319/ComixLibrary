@@ -16,6 +16,7 @@ public class ComixLibContext : DbContext
     private void TrackChanges()
     {
         ChangeTracker.DetectChanges();
+
         var entities = ChangeTracker.Entries().ToList();
         var added = entities.Where(x => x.State == EntityState.Added).Select(x => x.Entity);
         var updated = entities.Where(x => x.State == EntityState.Modified).Select(x => x.Entity);
