@@ -1,6 +1,4 @@
-﻿using Core.Data;
-using Core.Domain;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repository;
 
@@ -19,7 +17,7 @@ public class BaseRepository<T> : IRepository<T> where T : BaseEntity
         await context.SaveChangesAsync();
     }
 
-    public async Task<bool> DeleteAsync(int id)
+    public async Task<bool> DeleteAsync(Guid id)
     {
         var entitySet = context.Set<T>();
         var entity = await entitySet.FirstOrDefaultAsync(x => x.Id == id);
@@ -40,7 +38,7 @@ public class BaseRepository<T> : IRepository<T> where T : BaseEntity
         return Task.FromResult(entityList.AsEnumerable());
     }
 
-    public async Task<T?> GetAsync(int id)
+    public async Task<T?> GetAsync(Guid id)
     {
         var entitySet = context.Set<T>();
         var entity = await entitySet.FirstOrDefaultAsync(x => x.Id == id);
@@ -53,7 +51,7 @@ public class BaseRepository<T> : IRepository<T> where T : BaseEntity
         return entity;
     }
 
-    public async Task<bool> IsExist(int id)
+    public async Task<bool> IsExist(Guid id)
     {
         var entitySet = context.Set<T>();
         var entity = await entitySet.FirstOrDefaultAsync(x => x.Id == id);

@@ -1,5 +1,4 @@
-﻿using Core.Domain;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Data;
 
