@@ -6,10 +6,13 @@ public class ComixLibContext : DbContext
 {
     public ComixLibContext(DbContextOptions<ComixLibContext> options) : base(options) { }
 
+    public DbSet<Comix> Comixes { get; set; }
+    public DbSet<Admin> Admins { get; set; }
+
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         TrackChanges();
-        return await SaveChangesAsync();
+        return await base.SaveChangesAsync();
     }
 
     private void TrackChanges()

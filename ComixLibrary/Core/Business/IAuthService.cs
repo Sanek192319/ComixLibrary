@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Core.Business;
 
-namespace Core.Business
+public interface IAuthService
 {
-    internal class IAuthService
-    {
-    }
+    Task Auth(string login, string pass);
+    Task Login(string login, string pass);
 }

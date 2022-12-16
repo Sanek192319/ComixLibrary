@@ -1,0 +1,36 @@
+version:  "3.9"
+
+services:
+  app:
+    container_name: "comix-app"
+    build:
+      context: .
+      dockerfile: ./ComixLibrary/UI/Dockerfile
+    depends_on:
+      - "comix-db"
+    ports:
+      - "5001:80"
+    networks:
+      - "comix_net"
+  
+  comix-db:
+    image: postgres
+    container_name : "comix-db"
+    volumes:
+      - db-data:/data/db
+    hostname: comix-db
+    networks:
+      - "comix_net"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: comix
+      POSTGRES_PASSWORD: qwerty
+      POSTGRES_DB: comix-db 
+
+volumes:
+  db-data: 
+
+networks:
+  comix_net:
+    driver: bridge
