@@ -1,0 +1,26 @@
+﻿@model IEnumerable<Comix>
+
+<div class="d-flex mt-5 gap-5">
+    <form asp-action="Search" asp-controller="Search" method="post" class="d-flex flex-column gap-2">
+        <input type="text" placeholder="Name" name="Name"/>
+        <input type="number" placeholder="Year" name="YearOfPublishing"/>
+        <input type="text" placeholder="Author" name="Author"/>
+        <input type="text" placeholder="Genre" name="Genre"/>
+        <button type="submit">Шукати</button>
+    </form>
+    <div class="d-flex flex-wrap">
+        @foreach (Comix item in @Model)
+        {
+            <div class="d-flex flex-column gap-1 col-6 p-1 pb-3">
+                <div class="d-flex justify-content-begin align-items-center">
+                    <img src="@item.PhotoPath" alt="Photo" class="img img-responsive full-width">
+                </div>
+                <span class="d-flex justify-content-start align-items-center h2 fw-bold">@item.Name</span>
+                <span class="d-flex justify-content-start align-items-center h5">@item.Genre</span>
+                <button onclick='window.location = "@Url.Action("Index", "Comix", new {id = item.Id})"' class="rounded-pill w-100 border-0 bg-dark text-white">
+                    Детальніше
+                </button>
+            </div>
+        }
+    </div>
+</div>

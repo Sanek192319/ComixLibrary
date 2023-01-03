@@ -1,44 +1,49 @@
 ﻿using Core.Data;
 using Core.Domain;
+using Core.Filters;
 using Microsoft.AspNetCore.Mvc;
 
-namespace UI.Controllers
+namespace UI.Controllers;
+
+public class SearchController : Controller
 {
-    public class SearchController : Controller
+    private readonly IUnitOfWork unitOfWork;
+    
+    private string author = string.Empty;
+    private string genre = string.Empty;
+    private int yearOfPublish = 0;
+    private string name = string.Empty;
+
+    public SearchController(IUnitOfWork unitOfWork)
     {
-        private readonly IUnitOfWork unitOfWork;
-        
-        private string Author = string.Empty;
-        private string Genre = string.Empty;
-        private int YearOfPublish = 0;
-        private string Name = string.Empty;
+        this.unitOfWork = unitOfWork;
+    }
 
-        public SearchController(IUnitOfWork unitOfWork)
-        {
-            this.unitOfWork = unitOfWork;
-        }
+    [HttpPost]
+    public async Task<IActionResult> Index(string filter)
+    {
+        name = filter;
+        var comixes = await GetComixesWithFilters();
+        return View("Index", comixes);
+    }
 
-        public async Task<IActionResult> Index()
-        {
-            var comixes = await unitOfWork.ComixRepository.GetAllAsync();
-            return View(comixes);
-        }
+    [HttpPost]
+    public async Task<IActionResult> Search(ComixFilter filter)
+    {
+        author = filter.Author;
+        genre = filter.Genre;
+        yearOfPublish = filter.YearOfPublishing;
+        name = filter.Name;
+        return await Index(name);
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> Search()
-        {
-            var comixes = await GetComixesWithFilters();
-            return View(comixes);
-        }
-
-        private  async Task<IEnumerable<Comix>> GetComixesWithFilters()
-        {
-            var comixes = await unitOfWork.ComixRepository.GetAllAsync();
-            comixes = string.IsNullOrEmpty(Author) ? comixes : comixes.Where(x => x.Author == Author);
-            comixes = string.IsNullOrEmpty(Genre) ? comixes : comixes.Where(x => x.Genre == Genre);
-            comixes = YearOfPublish is 0 ? comixes : comixes.Where(x => x.YearOfPublishing.Year == YearOfPublish);
-            comixes = string.IsNullOrEmpty(Name) ? comixes : comixes.Where(x => x.Name == Name);
-            return comixes;
-        }
+    private  async Task<IEnumerable<Comix>> GetComixesWithFilters()
+    {
+        var comixes = await unitOfWork.ComixRepository.GetAllAsync();
+        comixes = string.IsNullOrEmpty(author) ? comixes : comixes.Where(x => x.Author == author);
+        comixes = string.IsNullOrEmpty(genre) ? comixes : comixes.Where(x => x.Genre == genre);
+        comixes = yearOfPublish is 0 ? comixes : comixes.Where(x => x.YearOfPublishing == yearOfPublish);
+        comixes = string.IsNullOrEmpty(name) ? comixes : comixes.Where(x => x.Name.Contains(name));
+        return comixes;
     }
 }

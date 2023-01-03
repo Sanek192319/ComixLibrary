@@ -6,7 +6,9 @@ public class Comix : BaseEntity, IComparable<Comix>
     public string Description { get; set; }
     public string Genre { get; set; }
     public string Author { get; set; }
-    public DateTime YearOfPublishing { get; set; }
+    public int YearOfPublishing { get; set; }
+    public string FilePath { get; set; }
+    public string PhotoPath { get; set; }
 
     public int CompareTo(Comix? other)
     {

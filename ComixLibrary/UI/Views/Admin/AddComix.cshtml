@@ -1,0 +1,15 @@
+﻿<div class="d-flex flex-column justify-content-center min-vh-100">
+    <form asp-action="SaveComix" asp-controller="Admin" method="post" enctype="multipart/form-data">
+        <div class="d-flex flex-column justify-content-center align-items-center flex-wrap gap-4">
+            <input class="col-4" placeholder="Name" type="text" name="Name" />
+            <textarea class="col-4" placeholder="Description" name="Description" style="resize:none;"> </textarea>
+            <label class="text-center">Description</label>
+            <input class="col-4" placeholder="Genre" type="text" name="Genre" />
+            <input class="col-4" placeholder="Author" type="text" name="Author" />
+            <input class="col-4" placeholder="YearOfPublish" type="number" name="YearOfPublish" />
+            <div class="d-flex col-12 justify-content-center align-items-center"><input placeholder="Photo" type="file" name="Photo" /><span>Photo</span></div>
+            <div class="d-flex col-12 justify-content-center align-items-center"><input placeholder="DocFile" type="file" name="DocFile" /><span>File</span></div>
+            <input class="col-6" type="submit" name="Додати" value="Додати" />
+        </div>
+    </form>
+</div>

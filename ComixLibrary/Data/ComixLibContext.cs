@@ -1,21 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Enums;
+using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace Data;
 
 public class ComixLibContext : DbContext 
 {
-    public ComixLibContext(DbContextOptions<ComixLibContext> options) : base(options) { }
-
     public DbSet<Comix> Comixes { get; set; }
     public DbSet<Admin> Admins { get; set; }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        TrackChanges();
-        return await base.SaveChangesAsync();
-    }
-
-    private void TrackChanges()
     {
         ChangeTracker.DetectChanges();
 
@@ -33,6 +27,13 @@ public class ComixLibContext : DbContext
         {
             item.ModifiedDate = DateTime.Now;
         }
+        return await base.SaveChangesAsync();
+    }
+
+    public ComixLibContext(DbContextOptions<ComixLibContext> options) : base(options)
+    {
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
     }
 }
  

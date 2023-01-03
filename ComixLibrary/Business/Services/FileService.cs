@@ -4,8 +4,7 @@ using Core.Options;
 namespace Business.Services;
 
 public class FileService : IFileService
-{
-    
+{   
     private readonly FileSettings _fileSettings;
 
     public FileService(FileSettings fileSettings)

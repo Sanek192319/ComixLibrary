@@ -2,12 +2,46 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <div class="flex flex-column"> 
-    @foreach(Comix item in ViewBag.Comixes)
-    {
-        <div>@item.Author</div>
-    }
+<header>
+    <div class="d-flex flex-row-reverse bg-secondary bg-opacity-25 p-2 gap-2">
+        <form asp-action="Index" asp-controller="Search" method="post" class="d-flex flex-row-reverse flex-grow-1">
+            <input type="text" id="filter" name="filter" class="w-25 rounded-pill border-0" style="height: 2.5rem;" placeholder="Введіть назву коміксу" />
+            <button type="submit" class="bg-transparent border-0">
+                <span class="material-symbols-outlined d-flex justify-content-center align-items-center">
+                    search
+                </span>
+            </button>
+        </form>
+        <button class="rounded-3 border-0" onclick='window.location = "@Url.Action("Index", "Admin")";'>
+            <span class="d-flex justify-content-center align-items-center">
+                Admin Panel
+            </span>
+        </button>
     </div>
-</div>
+
+</header>
+<body>
+    <div class="d-flex justify-content-center bg-secondary bg-opacity-25 align-items-center p-5" style="height: 30rem;">
+        <h1 class="text-black display-1">
+            Comix Lib
+        </h1>
+    </div>
+    <h5 class="d-flex display-5 mt-5 justify-content-center align-items-center">
+        Comixes
+    </h5>
+    <div class="d-flex flex-wrap mt-5">
+        @foreach (Comix item in ViewBag.Comixes)
+        {
+            <div class="d-flex flex-column gap-1 col-6 p-1 pb-3">
+                <div class="d-flex justify-content-begin align-items-center">
+                    <img src="@item.PhotoPath" alt="Photo" class="img img-responsive full-width">
+                </div>
+                <span class="d-flex justify-content-start align-items-center h2 fw-bold">@item.Name</span>
+                <span class="d-flex justify-content-start align-items-center h5">@item.Genre</span>
+                <button onclick='window.location = "@Url.Action("Index", "Comix", new {id = item.Id})"' class="rounded-pill w-50 border-0 bg-dark text-white">
+                    Детальніше
+                </button>
+            </div>
+        }
+    </div>
+</body>

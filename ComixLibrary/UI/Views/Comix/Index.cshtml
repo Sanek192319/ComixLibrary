@@ -1,0 +1,36 @@
+﻿@model Comix
+
+<div class="min-vh-100">
+    <header>
+    <div class="d-flex flex-row-reverse bg-secondary bg-opacity-25 p-2 gap-2">
+        <form asp-action="Index" asp-controller="Search" method="post" class="d-flex flex-row-reverse flex-grow-1">
+            <input type="text" id="filter" name="filter" class="w-25 rounded-pill border-0" style="height: 2.5rem;" placeholder="Введіть назву коміксу" />
+            <button type="submit" class="bg-transparent border-0">
+                <span class="material-symbols-outlined d-flex justify-content-center align-items-center">
+                    search
+                </span>
+            </button>
+        </form>
+        <button class="rounded-3 border-0" onclick='window.location = "@Url.Action("Index", "Admin")";'>
+            <span class="d-flex justify-content-center align-items-center">
+                Admin Panel
+            </span>
+        </button>
+    </div>
+    </header>
+    <div class="d-flex gap-5 mt-4">
+        <img src="@Model.PhotoPath" alt="photo" />
+        <div class="d-flex flex-column gap-2">
+            <span class="h1">@Model.Name</span>
+            <span class="h4">Genre: @Model.Genre</span>
+            <span class="h5">@Model.Description</span>
+            <span class="h5">Author: @Model.Author</span>
+            <button onclick='window.location = "@Url.Action("GetFile", "Comix", new {id=Model.Id})"'>
+            Завантажити
+        </button>
+            <button onclick='window.location = "@Url.Action("ReadFile", "Comix", new {id=Model.Id})"'>Читати онлайн</button>
+        </div>
+        
+    </div>
+    
+</div>

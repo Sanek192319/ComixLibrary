@@ -1,0 +1,8 @@
+﻿<div class="min-vh-100 d-flex flex-column justify-content-center align-items-center gap-2">
+    <span class="h2 mb-5">@ViewBag.Message</span>
+    <form class="d-flex flex-column gap-4" asp-action="Login" asp-controller="Admin" method="post">
+        <input class="rounded-pill border-1" type="text" name="login" placeholder="Логін"/>
+        <input class="rounded-pill border-1" type="password" name="pass" placeholder="Пароль"/>
+        <input class="rounded-pill border-1" type="submit" value="Send"/>
+</form>
+</div>

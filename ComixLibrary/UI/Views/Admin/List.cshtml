@@ -1,0 +1,16 @@
+﻿@model IEnumerable<Comix?>
+
+<div class="d-flex flex-column gap-3 justify-content-center min-vh-100">
+    @foreach (Comix comix in Model)
+    {
+        <div class="d-flex gap-2">
+            <span>@comix.Name</span>
+            <button class="rounded-pill border-0" onclick='window.location = "@Url.Action("EditComix", "Admin", comix)";'>
+                Update
+            </button>
+            <button class="rounded-pill border-0" onclick='window.location = "@Url.Action("DeleteComix", "Admin", comix.Id)";'>
+                Delete
+            </button>
+        </div>
+    }
+</div>

@@ -2,6 +2,7 @@
 
 public class FileSettings
 {
-    public string Path { get; set; }
+    public string FilePath { get; set; }
+    public string PhotoPath { get; set; }
     public IEnumerable<string> FileExtensions { get; set; }
 }
