@@ -17,7 +17,7 @@ public class BaseRepository<T> : IRepository<T> where T : BaseEntity
         await context.SaveChangesAsync();
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task<bool> DeleteAsync(int id)
     {
         var entitySet = context.Set<T>();
         var entity = await entitySet.FirstOrDefaultAsync(x => x.Id == id);
@@ -38,7 +38,7 @@ public class BaseRepository<T> : IRepository<T> where T : BaseEntity
         return Task.FromResult(entityList.AsEnumerable());
     }
 
-    public async Task<T?> GetAsync(Guid id)
+    public async Task<T?> GetAsync(int id)
     {
         var entitySet = context.Set<T>();
         var entity = await entitySet.FirstOrDefaultAsync(x => x.Id == id);
@@ -51,7 +51,7 @@ public class BaseRepository<T> : IRepository<T> where T : BaseEntity
         return entity;
     }
 
-    public async Task<bool> IsExist(Guid id)
+    public async Task<bool> IsExist(int id)
     {
         var entitySet = context.Set<T>();
         var entity = await entitySet.FirstOrDefaultAsync(x => x.Id == id);
@@ -61,6 +61,7 @@ public class BaseRepository<T> : IRepository<T> where T : BaseEntity
             return false;
         }
 
+        context.Entry(entity).State = EntityState.Detached;
         return true;
     }
 
@@ -74,5 +75,6 @@ public class BaseRepository<T> : IRepository<T> where T : BaseEntity
         }
 
         context.Set<T>().Update(entity);
+        await context.SaveChangesAsync();
     }
 }

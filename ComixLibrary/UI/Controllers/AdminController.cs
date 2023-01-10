@@ -56,14 +56,15 @@ public class AdminController : Controller
         return View();
     }
 
-    public async Task<ActionResult> DeleteComix([FromRoute] Guid id)
+    public async Task<ActionResult> DeleteComix([FromRoute] int id)
     {
         await unitOfWork.ComixRepository.DeleteAsync(id);
         return RedirectToAction("Index", controllerName: "Home");
     }
 
-    public ActionResult EditComix([FromRoute] Comix comix)
+    public async Task<ActionResult> EditComix([FromRoute] int id)
     {
+        var comix = await unitOfWork.ComixRepository.GetAsync(id);
         return View(comix);
     }
 
@@ -73,7 +74,6 @@ public class AdminController : Controller
         var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
         await fileService.UploadFile(comix.DocFile.OpenReadStream(), path + fileSettings.FilePath + comix.DocFile.FileName);
         await fileService.UploadFile(comix.Photo.OpenReadStream(), path + fileSettings.PhotoPath + comix.Photo.FileName);
-        
         await unitOfWork.ComixRepository.AddAsync(new Comix
         {
             Author = comix.Author,
@@ -84,27 +84,50 @@ public class AdminController : Controller
             PhotoPath = fileSettings.PhotoPath + comix.Photo.FileName,
             Genre = comix.Genre
         });
-        
+
         return RedirectToAction("Index");
     }
 
-    [HttpPut]
-    private async Task UpdateComix([FromForm] UpdateComixViewModel comix)
+    [HttpPost]
+    public async Task<IActionResult> UpdateComix([FromForm] UpdateComixViewModel comix)
     {
+
         var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
-        await fileService.UploadFile(comix.DocFile.OpenReadStream(), path + fileSettings.FilePath + comix.DocFile.FileName);
-        await fileService.UploadFile(comix.Photo.OpenReadStream(), path + fileSettings.PhotoPath + comix.Photo.FileName);
-        await unitOfWork.ComixRepository.UpdateAsync(new Comix
+        var oldComix = await unitOfWork.ComixRepository.GetAsync(int.Parse(comix.Id));
+
+        var newComix = new Comix
         {
-            Id = Guid.Parse(comix.Id),
+            Id = int.Parse(comix.Id),
             Author = comix.Author,
             Name = comix.Name,
             Description = comix.Description,
             YearOfPublishing = comix.YearOfPublish,
-            FilePath = fileSettings.FilePath + comix.DocFile.FileName,
-            PhotoPath = fileSettings.PhotoPath + comix.Photo.FileName,
             Genre = comix.Genre
-        });
+        };
+
+        if (comix.Photo is null)
+        {
+            newComix.PhotoPath = oldComix.PhotoPath;
+        }
+        else
+        {
+            await fileService.UploadFile(comix.Photo.OpenReadStream(), path + fileSettings.PhotoPath + comix.Photo.FileName);
+            newComix.PhotoPath = fileSettings.PhotoPath + comix.Photo.FileName;
+        }
+
+        if (comix.DocFile is null)
+        {
+            newComix.FilePath = oldComix.FilePath;
+        }
+        else
+        {
+            await fileService.UploadFile(comix.DocFile.OpenReadStream(), path + fileSettings.FilePath + comix.DocFile.FileName);
+            newComix.FilePath = fileSettings.FilePath + comix.DocFile.FileName;
+        }
+
+        await unitOfWork.ComixRepository.UpdateAsync(newComix);
+
+        return RedirectToAction("Index");
     }
 
     public async Task<IActionResult> List()

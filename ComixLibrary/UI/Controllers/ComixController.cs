@@ -18,14 +18,14 @@ namespace UI.Controllers
         [HttpGet("/Comix/{id}")]
         public async Task<IActionResult> Index([FromRoute] string id)
         {
-            var comix = await unitOfWork.ComixRepository.GetAsync(Guid.Parse(id));
+            var comix = await unitOfWork.ComixRepository.GetAsync(int.Parse(id));
             return View(comix);
         }
 
         [HttpGet("/Comix/{id}/GetFile")]
         public async Task<IActionResult> GetFile([FromRoute] string id)
         {
-            var comix = await unitOfWork.ComixRepository.GetAsync(Guid.Parse(id));
+            var comix = await unitOfWork.ComixRepository.GetAsync(int.Parse(id));
 
             string fileType = "application/octet-stream";
             var fileInfo = new FileInfo(comix.FilePath);
@@ -38,7 +38,7 @@ namespace UI.Controllers
         [HttpGet("/Comix/{id}/ReadFile")]
         public async Task<IActionResult> ReadFile([FromRoute] string id)
         {
-            var comix = await unitOfWork.ComixRepository.GetAsync(Guid.Parse(id));
+            var comix = await unitOfWork.ComixRepository.GetAsync(int.Parse(id));
 
             string fileType = "application/pdf";
             var fileInfo = new FileInfo(comix.FilePath);
